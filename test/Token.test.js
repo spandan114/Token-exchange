@@ -38,11 +38,18 @@ describe("Token", async () => {
 
   describe("Transfer", () => {
     it("transfer token",async()=>{
-      await tokenContract.transfer(address1.address,10,{from:owner.address})
+      const transferToken = await tokenContract.transfer(address1.address,10,{from:owner.address})
+      const event = await transferToken.wait()
+
+      expect(event.events.length).to.equal(1);
+      expect(event.events[0].event).to.equal("Transfer");
+      expect(event.events[0].args.from).to.equal(owner.address);
+      expect(event.events[0].args.to).to.equal(address1.address);
+      expect(event.events[0].args.value.toNumber()).to.equal(10);
+
       const ownerToken = await tokenContract.balanceOf(owner.address)
       const address1Token = await tokenContract.balanceOf(address1.address)
       expect(BigInt(ownerToken).toString()).to.equal("999999999999999999999990")
-      console.log("phase1")
       expect(address1Token.toString()).to.equal("10")
       
     })
