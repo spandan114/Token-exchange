@@ -4,6 +4,7 @@ const { ethers } = require("hardhat");
 describe("Token", async () => {
 
   var owner;
+  var address1;
   var address;
   const name = "BrownieToken";
   const symbol = "BW";
@@ -11,7 +12,7 @@ describe("Token", async () => {
   var tokenContract
 
   beforeEach(async () => {
-    [owner,address1,...address] = await ethers.getSigners();
+    [owner,address1,address2,...address] = await ethers.getSigners();
     const Token = await ethers.getContractFactory("Token"); //create instance
     tokenContract = await Token.deploy(); //Deploy contract
   });
@@ -53,6 +54,12 @@ describe("Token", async () => {
       expect(address1Token.toString()).to.equal("10")
       
     })
+    it("Should fail if user doesn't have enough token ", async ()=>{
+      const initialBalance = await tokenContract.balanceOf(owner.address);
+      await expect(tokenContract.connect(address1).transfer(owner.address,2)).to.be.revertedWith("You dont have enough tokens")
+      const currentBalance = await tokenContract.balanceOf(owner.address);
+      expect(currentBalance.toString()).to.equal(initialBalance.toString());
+   })
   })
 
 });
