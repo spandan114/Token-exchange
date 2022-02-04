@@ -3,17 +3,20 @@ require("@nomiclabs/hardhat-ethers");
 
 async function main() {
 
+  const [owner, address1, address2,address3,address4,address5, ...address] = await hre.ethers.getSigners();
+  console.log(address3)
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
   const Token = await hre.ethers.getContractFactory("Token");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Exchange = await hre.ethers.getContractFactory("Exchange");
+  
   const token = await Token.deploy();
+  const exchange = await Exchange.deploy(address3.address);
 
-  await greeter.deployed();
   await token.deployed();
+  await exchange.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
-  console.log("token deployed to:", token.address);
+   console.log("token deployed to:", token.address);
+   console.log("exchange deployed to:", exchange.address);
 }
 
 main()
