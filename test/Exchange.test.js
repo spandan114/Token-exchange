@@ -38,8 +38,12 @@ describe("Exchange", async () => {
 
   describe("Deposits token", () => {
     it(`Track token deposited`, async () => {
-      await tokenContract.connect(owner).approve(exchangeContract.address, 1000);
-      const depositedToken = await exchangeContract.connect(owner).depositeToken(tokenContract.address, 1000);
+      await tokenContract
+        .connect(owner)
+        .approve(exchangeContract.address, 1000);
+      const depositedToken = await exchangeContract
+        .connect(owner)
+        .depositeToken(tokenContract.address, 1000);
 
       const event = await depositedToken.wait();
 
@@ -65,9 +69,7 @@ describe("Exchange", async () => {
 
     it(`Reject ether deposited`, async () => {
       await expect(
-        exchangeContract
-          .connect(address2)
-          .depositeToken(ETHER, 10)
+        exchangeContract.connect(address2).depositeToken(ETHER, 10)
       ).to.be.revertedWith("Ether deposite not allowed");
     });
 
@@ -83,8 +85,8 @@ describe("Exchange", async () => {
   describe("Deposits ether", () => {
     it(`Track ether deposited`, async () => {
       const depositeEther = await exchangeContract
-      .connect(address4)
-      .depositeEther({value: ethers.utils.parseEther("1")});
+        .connect(address4)
+        .depositeEther({ value: ethers.utils.parseEther("1") });
 
       const event = await depositeEther.wait();
 
@@ -92,8 +94,12 @@ describe("Exchange", async () => {
       expect(event.events[0].event).to.equal("Deposite");
       expect(event.events[0].args.token).to.equal(ETHER);
       expect(event.events[0].args.user).to.equal(address4.address);
-      expect(event.events[0].args.amount).to.equal(ethers.utils.parseEther("1"));
-      expect(event.events[0].args.balance).to.equal(ethers.utils.parseEther("1"));
+      expect(event.events[0].args.amount).to.equal(
+        ethers.utils.parseEther("1")
+      );
+      expect(event.events[0].args.balance).to.equal(
+        ethers.utils.parseEther("1")
+      );
 
       const etherBalance = await exchangeContract.tokens(
         ETHER,
@@ -101,8 +107,80 @@ describe("Exchange", async () => {
       );
 
       expect(etherBalance).to.equal(ethers.utils.parseEther("1"));
-
     });
   });
 
+  describe("Withdraw ether", () => {
+    it(`Failed if user doesn't have enough ether`, async () => {
+      await expect(
+        exchangeContract
+          .connect(address2)
+          .withdrawEther(ethers.utils.parseEther("1"))
+      ).to.be.revertedWith("Account balance low");
+    });
+
+    it(`Withdraw ether from account`, async () => {
+      await exchangeContract
+        .connect(address4)
+        .depositeEther({ value: ethers.utils.parseEther("2") });
+
+      const withdrawEther = await exchangeContract
+        .connect(address4)
+        .withdrawEther(ethers.utils.parseEther("1"));
+
+      const event = await withdrawEther.wait();
+
+      expect(event.events.length).to.equal(1);
+      expect(event.events[0].event).to.equal("Withdraw");
+      expect(event.events[0].args.token).to.equal(ETHER);
+      expect(event.events[0].args.user).to.equal(address4.address);
+      expect(event.events[0].args.amount).to.equal(
+        ethers.utils.parseEther("1")
+      );
+      expect(event.events[0].args.balance).to.equal(
+        ethers.utils.parseEther("2")
+      );
+    });
+  });
+
+  describe("Withdraw Token", () => {
+    it(`Failed if user doesn't have enough token`, async () => {
+      await expect(
+        exchangeContract
+          .connect(address2)
+          .withdrawToken(tokenContract.address, 10)
+      ).to.be.revertedWith("Account balance low");
+    });
+
+    it(`Withdraw token from account`, async () => {
+      await tokenContract
+        .connect(owner)
+        .approve(exchangeContract.address, 1000);
+      await exchangeContract
+        .connect(owner)
+        .depositeToken(tokenContract.address, 1000);
+      const withdrawToken = await exchangeContract
+        .connect(owner)
+        .withdrawToken(tokenContract.address, 10);
+
+      const event = await withdrawToken.wait();
+
+      expect(event.events.length).to.equal(2);
+      expect(event.events[1].event).to.equal("Withdraw");
+      expect(event.events[1].args.token).to.equal(tokenContract.address);
+      expect(event.events[1].args.user).to.equal(owner.address);
+      expect(event.events[1].args.amount).to.equal(10);
+      expect(event.events[1].args.balance).to.equal("1990");
+    });
+  });
+
+  describe("Check user token balance", () => {
+    it(`Token balance must 1990`, async () => {
+      const userBalance = await exchangeContract.balanceOf(
+        owner.address,
+        tokenContract.address
+      );
+      expect(userBalance).to.equal("1990");
+    });
+  });
 });
