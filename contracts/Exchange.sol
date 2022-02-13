@@ -5,9 +5,9 @@ import "hardhat/console.sol";
 import "./Token.sol";
 
 contract Exchange {
-// Deposite & withdraw fund
-// Manage order - Make or Cancel 
-// Handle trade - charge fee
+//[x] Deposite & withdraw fund
+//[ ] Manage order - Make or Cancel 
+//[ ] Handle trade - charge fee
 
 address public feeAccount;
 uint256 public feePercent;
@@ -15,6 +15,21 @@ address ETHER = address(0);
 // erc-20 token address => ( my address => no of token)
 mapping(address=>mapping(address=>uint256)) public tokens;
 
+//model the order
+struct _Order{
+  uint id;
+  address user;
+  address tokenGet;
+  address tokenGive;
+  uint amountGet;
+  uint amountGive;
+  uint timestamp;
+}
+
+// Map the order
+// Add the order to storage
+
+//Events
 event Deposite(address indexed token, address indexed user, uint256 amount, uint256 balance);
 event Withdraw(address indexed token, address indexed user, uint256 amount, uint256 balance);
 
