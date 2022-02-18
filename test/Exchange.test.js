@@ -183,4 +183,61 @@ describe("Exchange", async () => {
       expect(userBalance).to.equal("1990");
     });
   });
+
+  describe("Make order", () => {
+    it(`Order token`, async () => {
+       const exchangeToken = await exchangeContract.connect(address2).makeOrder(tokenContract.address, 1, ETHER, 1);
+     
+        const event = await exchangeToken.wait();
+        expect(event.events.length).to.equal(1);
+        expect(event.events[0].event).to.equal("Order");
+        expect(event.events[0].args.user).to.equal(address2.address);
+        expect(event.events[0].args.tokenGet).to.equal(ETHER);
+        expect(event.events[0].args.tokenGive).to.equal(tokenContract.address);
+        expect(event.events[0].args.amountGet).to.equal(1);
+        expect(event.events[0].args.amountGive).to.equal(1);
+        expect(event.events[0].args.timestamp).to.gt(0)
+   
+    });
+    it(`Track the newly created order`, async () => {
+       const orderCount = await exchangeContract.orderCount(); 
+       expect(orderCount).to.gt(0);
+       const orders = await exchangeContract.orders(1); 
+
+       expect(orders.id).to.equal(1);
+       expect(orders.user).to.equal(address2.address);
+       expect(orders.tokenGet).to.equal(ETHER);
+       expect(orders.tokenGive).to.equal(tokenContract.address);
+       expect(orders.amountGet).to.equal(1);
+       expect(orders.amountGive).to.equal(1);
+       expect(orders.timestamp).to.gt(0)
+    })
+  });
+
+  describe("Cancel order", () => {
+    
+    it(`Cancel order`, async () => {
+      await exchangeContract.connect(address2).makeOrder(tokenContract.address, 1, ETHER, 1);
+      const canceledOrder = await exchangeContract.connect(address2).cancelOrder(1);
+      const event = await canceledOrder.wait();
+      expect(event.events.length).to.equal(1);
+      expect(event.events[0].event).to.equal("CancelOrder");
+      expect(event.events[0].args.user).to.equal(address2.address);
+      expect(event.events[0].args.tokenGet).to.equal(ETHER);
+      expect(event.events[0].args.tokenGive).to.equal(tokenContract.address);
+      expect(event.events[0].args.amountGet).to.equal(1);
+      expect(event.events[0].args.amountGive).to.equal(1);
+      expect(event.events[0].args.timestamp).to.gt(0)
+    })
+
+    it(`Cancel invalid order`, async () => {
+      const canceledOrderInvalidUser = await exchangeContract.connect(address1).cancelOrder(1);
+      await expect(
+        canceledOrderInvalidUser
+      ).to.be.revertedWith("You are not create this order");
+
+    })
+
+  })
+
 });
