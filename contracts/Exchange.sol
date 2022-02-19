@@ -7,7 +7,7 @@ import "./Token.sol";
 contract Exchange {
 //[x] Deposite & withdraw fund
 //[x] Manage order - Make or Cancel 
-//[ ] Handle trade - charge fee
+//[ ] Handle trade - fill order &charge fee
 
 address public feeAccount;
 uint256 public feePercent;
@@ -16,6 +16,7 @@ address ETHER = address(0);
 mapping(address => mapping(address=>uint256)) public tokens;
 mapping(uint256 => _Order) public orders;
 mapping(uint256 => bool) public canceldOrders;
+mapping(uint256 => bool) public orderFilled;
 uint256 public orderCount;
 
 //model the order
@@ -45,6 +46,16 @@ event Order(
   uint timestamp
 );
 event CancelOrder(
+  uint id,
+  address user,
+  address tokenGet,
+  address tokenGive,
+  uint amountGet,
+  uint amountGive,
+  uint timestamp
+);
+
+event FillOrder(
   uint id,
   address user,
   address tokenGet,
@@ -104,6 +115,7 @@ function balanceOf(address _user,address _token) public view returns(uint){
 }
 
 function makeOrder(address _tokenGive,uint _amountGive,address _tokenGet,uint _amountGet) public{
+    console.log(msg.sender);
     orderCount += 1;
     orders[orderCount] = _Order(orderCount,msg.sender,_tokenGet,_tokenGive,_amountGet,_amountGive,block.timestamp);
     emit Order(orderCount,msg.sender,_tokenGet,_tokenGive,_amountGet,_amountGive,block.timestamp);
@@ -111,13 +123,40 @@ function makeOrder(address _tokenGive,uint _amountGive,address _tokenGet,uint _a
 
 function cancelOrder(uint orderId) public {
   _Order storage _order = orders[orderId];
-  
+
   //User must be same who created the order
   require(address(_order.user) == msg.sender,"You are not create this order");
   //Order must be exists
   require(_order.id == orderId,"Order not exists");
   canceldOrders[orderId]=true;
   emit CancelOrder(orderCount,msg.sender,_order.tokenGet,_order.tokenGive,_order.amountGet,_order.amountGive,_order.timestamp);
+}
+
+function fillOrder(uint orderId) public {
+  require(orderId > 0 && orderId <= orderCount);
+  require(!canceldOrders[orderId],"Cant fill canceled order !");
+  require(!orderFilled[orderId],"Order alredy filled !");
+  _Order storage _order = orders[orderId];
+
+  _trade(_order.id,_order.user,_order.tokenGet,_order.tokenGive,_order.amountGet,_order.amountGive);
+  //marke order as completed
+  orderFilled[orderId] = true;
+}
+
+function _trade(uint _orderId,address _user,address _tokenGet,address _tokenGive,uint _amountGet,uint _amountGive) internal {
+
+uint feeAmount = (_amountGive*feePercent)/100;
+
+//msg.sender =  user who fill the order
+tokens[_tokenGet][msg.sender] -= _amountGet+feeAmount;
+tokens[_tokenGet][_user] += _amountGet;
+//charge fee
+tokens[_tokenGet][feeAccount] += feeAmount;
+
+tokens[_tokenGive][_user] -= _amountGive;
+tokens[_tokenGive][msg.sender] += _amountGive;
+//emit event
+emit FillOrder(_orderId, _user, _tokenGet,_tokenGive, _amountGet, _amountGive, block.timestamp);
 }
 
 }

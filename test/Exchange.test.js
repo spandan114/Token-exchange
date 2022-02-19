@@ -217,7 +217,6 @@ describe("Exchange", async () => {
   describe("Cancel order", () => {
     
     it(`Cancel order`, async () => {
-      await exchangeContract.connect(address2).makeOrder(tokenContract.address, 1, ETHER, 1);
       const canceledOrder = await exchangeContract.connect(address2).cancelOrder(1);
       const event = await canceledOrder.wait();
       expect(event.events.length).to.equal(1);
@@ -231,13 +230,22 @@ describe("Exchange", async () => {
     })
 
     it(`Cancel invalid order`, async () => {
-      const canceledOrderInvalidUser = await exchangeContract.connect(address1).cancelOrder(1);
+   
       await expect(
-        canceledOrderInvalidUser
+        exchangeContract.connect(address5).cancelOrder(1)
       ).to.be.revertedWith("You are not create this order");
 
     })
 
+  })
+
+  describe("Handle trade", () => {
+    it(`Fill order`, async () => {
+      await exchangeContract.connect(owner).makeOrder(tokenContract.address, 1, ETHER, 1);
+     const canceledOrder = await exchangeContract.connect(address4).fillOrder(2);
+       //console.log(await exchangeContract.canceldOrders(2))
+      //orderFilled
+    })
   })
 
 });
