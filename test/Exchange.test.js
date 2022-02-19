@@ -242,9 +242,18 @@ describe("Exchange", async () => {
   describe("Handle trade", () => {
     it(`Fill order`, async () => {
       await exchangeContract.connect(owner).makeOrder(tokenContract.address, 1, ETHER, 1);
-     const canceledOrder = await exchangeContract.connect(address4).fillOrder(2);
-       //console.log(await exchangeContract.canceldOrders(2))
-      //orderFilled
+      const filledOrder = await exchangeContract.connect(address4).fillOrder(2);
+      expect(await exchangeContract.orderFilled(2)).to.eq(true)
+      const event = await filledOrder.wait();
+
+      expect(event.events[0].event).to.equal("FillOrder");
+      expect(event.events[0].args.id).to.equal(2);
+      expect(event.events[0].args.user).to.equal(owner.address);
+      expect(event.events[0].args.tokenGet).to.equal(ETHER);
+      expect(event.events[0].args.tokenGive).to.equal(tokenContract.address);
+      expect(event.events[0].args.amountGet).to.equal(1);
+      expect(event.events[0].args.amountGive).to.equal(1);
+      
     })
   })
 
