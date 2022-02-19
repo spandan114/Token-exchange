@@ -255,6 +255,14 @@ describe("Exchange", async () => {
       expect(event.events[0].args.amountGive).to.equal(1);
       
     })
+    it(`Check account balance`, async () => {
+      //TODO:
+    })
+
+    it(`Check failed fill order`, async () => {
+      //TODO:
+    })
+
   })
 
 });
