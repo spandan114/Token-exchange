@@ -1,16 +1,15 @@
 const hre = require("hardhat");
-require("@nomiclabs/hardhat-ethers");
 
 async function main() {
 
-  const [owner, address1, address2,address3,address4,address5, ...address] = await hre.ethers.getSigners();
-  console.log(address3)
+  const [deployer] = await hre.ethers.getSigners();
+  console.log(deployer.address)
   // We get the contract to deploy
   const Token = await hre.ethers.getContractFactory("Token");
   const Exchange = await hre.ethers.getContractFactory("Exchange");
   
   const token = await Token.deploy();
-  const exchange = await Exchange.deploy(address3.address);
+  const exchange = await Exchange.deploy(deployer.address);
 
   await token.deployed();
   await exchange.deployed();
