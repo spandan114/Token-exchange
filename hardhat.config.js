@@ -1,7 +1,7 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-waffle");
-const { ACCOUNT_PRIVATE_KEY } = process.env;
+const { ACCOUNT_PRIVATE_KEY,ALCHEMY_KEY } = process.env;
 
 module.exports = {
   solidity: "0.8.4",
