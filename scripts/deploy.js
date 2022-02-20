@@ -9,7 +9,7 @@ async function main() {
   const Exchange = await hre.ethers.getContractFactory("Exchange");
   
   const token = await Token.deploy();
-  const exchange = await Exchange.deploy(deployer.address);
+  const exchange = await Exchange.deploy(deployer.address,10);
 
   await token.deployed();
   await exchange.deployed();

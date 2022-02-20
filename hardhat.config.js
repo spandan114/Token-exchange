@@ -13,9 +13,8 @@ module.exports = {
   },
   networks: {
     hardhat: {},
-    ganache: {
-      url: "http://127.0.0.1:7545",
-      accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
+    localhost: {
+      url: "http://127.0.0.1:7545"
     },
     // rinkeby: {
     //   url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_KEY}`,
