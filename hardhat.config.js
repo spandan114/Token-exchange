@@ -1,20 +1,17 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
-
-//require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-ganache");
+require("@nomiclabs/hardhat-waffle");
 const { ACCOUNT_PRIVATE_KEY } = process.env;
 
 module.exports = {
   solidity: "0.8.4",
-  defaultNetwork: "ganache",
+  // defaultNetwork: "rinkeby",
   paths: {
     artifacts: "./client/src/artifacts",
   },
   networks: {
-    hardhat: {},
-    localhost: {
-      url: "http://127.0.0.1:7545"
+    hardhat: {
+      chainId: 31337
     },
     // rinkeby: {
     //   url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_KEY}`,
