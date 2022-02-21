@@ -47,3 +47,10 @@ body {
 .nav-link:hover{
   color: #ffffff;
 }
+.height-full{
+  min-height: 100vh;
+  overflow: auto;
+}
+.height-half{
+  min-height: 50vh;
+}
