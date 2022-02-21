@@ -7,7 +7,7 @@ import "./Token.sol";
 contract Exchange {
 //[x] Deposite & withdraw fund
 //[x] Manage order - Make or Cancel 
-//[ ] Handle trade - fill order &charge fee
+//[x] Handle trade - fill order &charge fee
 
 address public feeAccount;
 uint256 public feePercent;
