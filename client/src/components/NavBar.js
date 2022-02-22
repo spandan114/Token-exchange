@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const NavBar = () => {
+
+  const account = useSelector((state) => state.web3Reducer.account);
+
   return (
     <nav className="navbar navbar-expand-lg pl-md-5 pl-md-5 ">
       <a className="navbar-brand" href="#">
@@ -22,7 +26,7 @@ const NavBar = () => {
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
             <p className="nav-link" href="#">
-              Connect wallet
+              {account?account:"Connect wallet"}
             </p>
           </li>
         </ul>
