@@ -1,6 +1,30 @@
+import React, { useEffect } from 'react'
+import Web3 from 'web3';
 import NavBar from "./components/NavBar";
+import ExchangeContract from "./artifacts/contracts/Exchange.sol/Exchange.json"
+
 
 function App() {
+
+  const loadWeb3 = async()=>{
+     const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+     const accounts = await web3.eth.getAccounts()
+
+     const _tokenExchange = new web3.eth.Contract(
+      ExchangeContract.abi,
+      "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    );
+
+    const feeAccount = await _tokenExchange.methods.feeAccount().call()
+    console.log(feeAccount)
+
+  }
+
+  useEffect(() => {
+    loadWeb3()
+  }, [])
+  
+
   return (
     <>
     <NavBar/>
