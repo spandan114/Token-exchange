@@ -25,3 +25,24 @@ export const accountLoaded = (account) => {
         payload:account[0]
      }
 }
+
+export const canceledOrderLoaded = (cancelOrders) => {
+    return {
+        type:"CANCELED_ORDER_LOADER",
+        payload:cancelOrders
+     }
+}
+
+export const filledOrderLoaded = (filledOrders) => {
+    return {
+        type:"FILLED_ORDER_LOADER",
+        payload:filledOrders
+     }
+}
+
+export const allOrderLoaded = (filledOrders) => {
+    return {
+        type:"ALL_ORDER_LOADER",
+        payload:filledOrders
+     }
+}

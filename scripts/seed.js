@@ -36,7 +36,7 @@ const seed = async(tokenContract,exchangeContract) => {
 
     result = await exchangeContract
       .connect(receiver)
-      .makeOrder(tokenContract.address, 1, ETHER, 1);
+      .makeOrder(tokenContract.address, 10, ETHER, ethers.utils.parseEther("0.05"));
     event = await result.wait();
     orderId = event.events[0].args.id;
     await exchangeContract.connect(receiver).cancelOrder(orderId);

@@ -1,6 +1,9 @@
 import {
   accountLoaded,
+  allOrderLoaded,
+  canceledOrderLoaded,
   exchangeContractLoaded,
+  filledOrderLoaded,
   tokenContractLoaded,
   web3Loaded,
 } from "./actions";
@@ -47,7 +50,28 @@ export const loadExchangeContract = async (web3, dispatch) => {
 };
 
 
-export const loadOrders = async (web3, dispatch) => {
-//load all orders from events
-//getPastEvents
+export const loadOrders = async (exchangeContract, dispatch) => {
+//Load canceled orders
+//Load filled order
+//Load all orders from order event
+
+const canceledOrders = await exchangeContract.getPastEvents("CancelOrder",{
+  fromBlock: 0,
+  toBlock: 'latest'
+})
+
+const filledOrders = await exchangeContract.getPastEvents("FillOrder",{
+  fromBlock: 0,
+  toBlock: 'latest'
+})
+
+const allOrders = await exchangeContract.getPastEvents("Order",{
+  fromBlock: 0,
+  toBlock: 'latest'
+})
+
+dispatch(allOrderLoaded(allOrders));
+dispatch(filledOrderLoaded(filledOrders));
+dispatch(canceledOrderLoaded(canceledOrders));
+
 }
