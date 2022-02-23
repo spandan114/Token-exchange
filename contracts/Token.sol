@@ -18,9 +18,11 @@ contract Token {
 constructor(){
    totalSupply = 1000000 * (10**decimals);
    balanceOf[msg.sender] = totalSupply;
+   console.log(msg.sender);
 }
 
 function transfer(address _to,uint256 _value)public returns(bool) {
+   console.log(balanceOf[msg.sender],_value);
    require(balanceOf[msg.sender] >= _value,"You dont have enough tokens");
    balanceOf[msg.sender] -= _value;
    balanceOf[_to] += _value;

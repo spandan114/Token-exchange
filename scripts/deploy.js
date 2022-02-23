@@ -1,4 +1,5 @@
 const hre = require("hardhat");
+const { seed } = require("./seed");
 
 async function main() {
 
@@ -14,6 +15,8 @@ async function main() {
   await token.deployed();
   await exchange.deployed();
 
+  await seed(token,exchange)
+  
    console.log("token deployed to:", token.address);
    console.log("exchange deployed to:", exchange.address);
 }

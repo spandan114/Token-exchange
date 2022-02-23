@@ -45,3 +45,9 @@ export const loadExchangeContract = async (web3, dispatch) => {
     alert("Something went wrong token contract not loaded !");
   }
 };
+
+
+export const loadOrders = async (web3, dispatch) => {
+//load all orders from events
+//getPastEvents
+}

@@ -10,7 +10,8 @@ npx hardhat compile
 npx hardhat clean
 npx hardhat test
 npx hardhat node
-node scripts/sample-script.js
+node scripts/deploy.js
+npx hardhat run scripts/seed.js
 npx hardhat help
 npx hardhat run scripts/deploy.js --network localhost
 ```
