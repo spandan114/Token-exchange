@@ -144,9 +144,7 @@ function fillOrder(uint orderId) public {
 }
 
 function _trade(uint _orderId,address _user,address _tokenGet,address _tokenGive,uint _amountGet,uint _amountGive) internal {
-
 uint feeAmount = (_amountGive*feePercent)/100;
-
 //msg.sender =  user who fill the order
 tokens[_tokenGet][msg.sender] -= _amountGet+feeAmount;
 tokens[_tokenGet][_user] += _amountGet;

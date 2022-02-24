@@ -1,6 +1,15 @@
+
 function wait(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
+
+const ether = (n) => {
+  const weiBigNumber = ethers.utils.parseEther(n.toString());
+  const wei = weiBigNumber.toString();
+  return wei
+}
+const tokens = (n) => ether(n)
+
 
 const seed = async(tokenContract,exchangeContract) => {
   try {
@@ -11,15 +20,15 @@ const seed = async(tokenContract,exchangeContract) => {
     // const Token = await ethers.getContractFactory("Token");
     // const Exchange = await ethers.getContractFactory("Exchange");
 
-    const depositeETH = await ethers.utils.parseEther("50");
+    const depositeETH = ether("50");
 
     // var tokenContract = await Token.deploy();
     // var exchangeContract = await Exchange.deploy(deployer.address, 10);
 
-    await tokenContract.connect(sender).transfer(receiver.address, 10000);
+    await tokenContract.connect(sender).transfer(receiver.address, tokens(10000));
     await tokenContract
       .connect(receiver)
-      .approve(exchangeContract.address, 10000);
+      .approve(exchangeContract.address, tokens(10000));
 
     await exchangeContract
       .connect(sender)
@@ -27,7 +36,7 @@ const seed = async(tokenContract,exchangeContract) => {
     await exchangeContract.connect(user4).depositeEther({ value: depositeETH });
     await exchangeContract
       .connect(receiver)
-      .depositeToken(tokenContract.address, 200);
+      .depositeToken(tokenContract.address, tokens(200));
 
     var result;
     var event;
@@ -36,7 +45,7 @@ const seed = async(tokenContract,exchangeContract) => {
 
     result = await exchangeContract
       .connect(receiver)
-      .makeOrder(tokenContract.address, 10, ETHER, ethers.utils.parseEther("0.05"));
+      .makeOrder(tokenContract.address, tokens(10), ETHER, ether(0.05));
     event = await result.wait();
     orderId = event.events[0].args.id;
     await exchangeContract.connect(receiver).cancelOrder(orderId);
@@ -47,9 +56,9 @@ const seed = async(tokenContract,exchangeContract) => {
       .connect(receiver)
       .makeOrder(
         tokenContract.address,
-        50,
+        tokens(50),
         ETHER,
-        await ethers.utils.parseEther("0.20")
+        ether(0.20)
       );
     event = await result.wait();
     orderId = event.events[0].args.id;
@@ -61,9 +70,9 @@ const seed = async(tokenContract,exchangeContract) => {
       .connect(receiver)
       .makeOrder(
         tokenContract.address,
-        30,
+        tokens(30),
         ETHER,
-        await ethers.utils.parseEther("0.12")
+        ether(0.12)
       );
     event = await result.wait();
     orderId = event.events[0].args.id;
@@ -75,9 +84,9 @@ const seed = async(tokenContract,exchangeContract) => {
       .connect(receiver)
       .makeOrder(
         tokenContract.address,
-        80,
+        tokens(80),
         ETHER,
-        await ethers.utils.parseEther("0.22")
+        ether(0.22)
       );
     event = await result.wait();
     orderId = event.events[0].args.id;
@@ -89,9 +98,9 @@ const seed = async(tokenContract,exchangeContract) => {
         .connect(receiver)
         .makeOrder(
           tokenContract.address,
-          10 * 1,
+          tokens(10 * 1),
           ETHER,
-          await ethers.utils.parseEther("0.02")
+          ether(0.02)
         );
       await wait(10);
     }
@@ -102,9 +111,9 @@ const seed = async(tokenContract,exchangeContract) => {
         .connect(user4)
         .makeOrder(
           ETHER,
-          await ethers.utils.parseEther("0.01"),
+          ether(0.01),
           tokenContract.address,
-          10 * i
+          tokens(10 * i)
         );
       await wait(10);
     }

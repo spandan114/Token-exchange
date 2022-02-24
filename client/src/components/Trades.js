@@ -1,6 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { beatifyFilledData } from "../utils/helper";
 
 const Trades = () => {
+
+  const filledOrders = useSelector((state) => state.exchangeReducer.filledOrders);
+
+  console.log(beatifyFilledData(filledOrders[0]))
+
   return (
     <div className="table-container">
       <table className="table table-borderless ">
