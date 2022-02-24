@@ -54,3 +54,14 @@ body {
 .height-half{
   min-height: 50vh;
 }
+
+.table-container table{
+background: var(--light-black-s);
+color: #ffffff;
+}
+.table-container thead {
+  border-bottom: 1px solid #6e6e6e; 
+} 
+.table-container tr{
+  border-bottom: 1px solid #6e6e6e; 
+}
