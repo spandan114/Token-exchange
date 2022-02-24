@@ -65,3 +65,15 @@ color: #ffffff;
 .table-container tr{
   border-bottom: 1px solid #6e6e6e; 
 }
+.timestamp{
+  color: #b9b9b9;
+  font-size: 0.8rem;
+}
+.success{
+  color: #009b00;
+  font-weight: 500;
+}
+.danger{
+  color: #e60000;
+  font-weight: 500;
+}

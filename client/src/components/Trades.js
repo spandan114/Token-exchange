@@ -1,12 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { beatifyFilledData } from "../utils/helper";
+import { beatifyFilledData, filterOrder } from "../utils/helper";
 
 const Trades = () => {
 
   const filledOrders = useSelector((state) => state.exchangeReducer.filledOrders);
-
-  console.log(beatifyFilledData(filledOrders[0]))
 
   return (
     <div className="table-container">
@@ -19,21 +17,19 @@ const Trades = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {
+            filledOrders?
+            filterOrder(filledOrders).map((data,i)=>(
+              <tr key={i}> 
+              <td className="timestamp">{data.formattedTimestamp}</td>
+              <td>{data.tokenAmount}</td>
+              <td className={data.tokenPriceClass}>{data.tokenPrice}</td>
+            </tr>
+            ))
+            :"Loading..."
+          }
+
+
         </tbody>
       </table>
     </div>
