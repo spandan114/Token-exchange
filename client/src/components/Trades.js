@@ -24,7 +24,7 @@ const Trades = () => {
               <tr key={i}> 
               <td className="timestamp">{data.formattedTimestamp}</td>
               <td>{data.tokenAmount}</td>
-              <td className={data.tokenPriceClass}>{data.tokenPrice}</td>
+              <td className={`text-${data.tokenPriceClass}`} >{data.tokenPrice}</td>
             </tr>
             ))
             :<Spinner/>

@@ -8,7 +8,7 @@ export const ether = (wei) => {
     return wei / DECIMAL;
   }
 };
-export const token = ether;
+export const token = (n) => ether(n);
 
 export const filterFilledOrder = (orders) => {
   orders = orders.sort(
@@ -41,7 +41,7 @@ export const beautifyFilledData = (order) => {
 
   var tokenPrice = etherAmount / tokenAmount;
   //round off number by 4 decimal places
-  const roundOff = 1000;
+  const roundOff = 10000;
   tokenPrice = Math.round(tokenPrice * roundOff) / roundOff;
 
   return {

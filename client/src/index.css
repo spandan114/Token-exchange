@@ -51,6 +51,10 @@ body {
   height: 100vh;
   overflow: auto;
 }
+.height-full::-webkit-scrollbar {
+  background: transparent; /* make scrollbar transparent */
+  width: 0px;
+}
 .height-half{
   min-height: 50vh;
 }

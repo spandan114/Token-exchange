@@ -92,21 +92,24 @@ const seed = async(tokenContract,exchangeContract) => {
     orderId = event.events[0].args.id;
     await exchangeContract.connect(user4).fillOrder(orderId);
 
+
+
+
     //USER 1 make 10 orders
-    for (i = 0; i <= 10; i++) {
+    for (i = 1; i <= 10; i++) {
       await exchangeContract
         .connect(receiver)
         .makeOrder(
           tokenContract.address,
           tokens(10 * i),
           ETHER,
-          ether(0.02)
+          ether(0.01)
         );
       await wait(10);
     }
 
     //USER 2 make 10 orders
-    for (i = 0; i <= 10; i++) {
+    for (i = 1; i <= 10; i++) {
       await exchangeContract
         .connect(user4)
         .makeOrder(
