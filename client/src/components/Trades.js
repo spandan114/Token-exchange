@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { beatifyFilledData, filterOrder } from "../utils/helper";
+import { filterFilledOrder } from "../utils/helper";
+import Spinner from "./Spinner";
 
 const Trades = () => {
 
@@ -19,14 +20,14 @@ const Trades = () => {
         <tbody>
           {
             filledOrders?
-            filterOrder(filledOrders).map((data,i)=>(
+            filterFilledOrder(filledOrders).map((data,i)=>(
               <tr key={i}> 
               <td className="timestamp">{data.formattedTimestamp}</td>
               <td>{data.tokenAmount}</td>
               <td className={data.tokenPriceClass}>{data.tokenPrice}</td>
             </tr>
             ))
-            :"Loading..."
+            :<Spinner/>
           }
 
 

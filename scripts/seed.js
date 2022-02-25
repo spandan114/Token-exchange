@@ -98,7 +98,7 @@ const seed = async(tokenContract,exchangeContract) => {
         .connect(receiver)
         .makeOrder(
           tokenContract.address,
-          tokens(10 * 1),
+          tokens(10 * i),
           ETHER,
           ether(0.02)
         );
