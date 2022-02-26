@@ -121,12 +121,30 @@ export const markPunchesTag = (order) => {
       };
   };
 
-  export const myFilledOrders = (filledOrders,account) =>{
-    filledOrders = filledOrders.filter(o=> o.returnValues.user === account )
-    filledOrders = filledOrders.sort((a, b) => a.returnValues.timestamp - b.returnValues.timestamp);
-    filledOrders = decorateFilledOrder(filledOrders,account);
-    return filledOrders
-  }
+
+  export const filterTradeOrders = (orders,account) =>{
+    //Remove all canceled & filled Orders
+    var all = orders.orders;
+    var filled = orders.filledOrders;
+    var canceled = orders.canceledOrders;
+
+    all = all.filter(o=> o.returnValues.user === account )
+    filled = filled.filter(o=> o.returnValues.user === account )
+    canceled = canceled.filter(o=> o.returnValues.user === account )
+
+    var openOrders = _.reject(all,(order)=>{
+        var filledOrders = filled.some(O => O.returnValues.id === order.returnValues.id)
+        var canceledOrder = canceled.some(O => O.returnValues.id === order.returnValues.id)
+        return(filledOrders || canceledOrder)
+    })
+    openOrders = decorateOpenOrder(openOrders)
+    var filledOrders = decorateFilledOrder(filled)
+    var myTrades = {
+        openOrders:openOrders.sort((a, b) => a.returnValues.timestamp - b.returnValues.timestamp),
+        filledOrders:filledOrders.sort((a, b) => a.returnValues.timestamp - b.returnValues.timestamp)
+    }
+    return myTrades    
+}
 
   const decorateFilledOrder = (orders,account) =>{
     return orders.map((order) => {
@@ -135,6 +153,16 @@ export const markPunchesTag = (order) => {
         return order;
       });
 }
+
+
+const decorateOpenOrder = (orders) =>{
+  return orders.map((order) => {
+      order = beautifyFilledData(order);
+      order = markPunchesTag(order);
+      return order;
+    });
+}
+
 
 export const markFilledOrderStatusTag = (order,account) => {
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { myFilledOrders } from '../utils/helper'
+import { filterTradeOrders} from '../utils/helper'
 import Spinner from './Spinner';
 
 const MyTransactions = () => {
 
-  const filledOrders = useSelector((state) => state.exchangeReducer.filledOrders);
+  const allOrders = useSelector((state) => state.exchangeReducer);
   const account = useSelector((state) => state.web3Reducer.account);
-
+  var validator = (allOrders.hasOwnProperty("filledOrders") && allOrders.hasOwnProperty("orders") && allOrders.hasOwnProperty("canceledOrders"))
   return (
     <div className='transactions'>
       <ul className="nav nav-tabs">
@@ -33,8 +33,8 @@ const MyTransactions = () => {
         </thead>
         <tbody>
           {
-            filledOrders?
-            myFilledOrders(filledOrders,account).map((data,i)=>(
+            validator?
+            filterTradeOrders(allOrders,account).filledOrders.map((data,i)=>(
               <tr key={i}> 
               <td className="timestamp">{data.formattedTimestamp}</td>
               <td className={`text-${data.orderTypeClass}`}>{data.orderSign}{data.tokenAmount}</td>
@@ -59,17 +59,17 @@ const MyTransactions = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {
-            filledOrders?
-            filterFilledOrder(filledOrders).map((data,i)=>(
+          {
+            validator?
+            filterTradeOrders(allOrders,account).openOrders.map((data,i)=>(
               <tr key={i}> 
-              <td className="timestamp">{data.formattedTimestamp}</td>
-              <td>{data.tokenAmount}</td>
-              <td className={`text-${data.tokenPriceClass}`} >{data.tokenPrice}</td>
+              <td className={`text-${data.orderTypeClass}`}>{data.tokenAmount}</td>
+              <td className={`text-${data.orderTypeClass}`}>{data.tokenPrice}</td>
+              <td className='cancel'>X</td>
             </tr>
             ))
             :<Spinner/>
-          } */}
+          }
 
 
         </tbody>

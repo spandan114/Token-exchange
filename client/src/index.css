@@ -56,9 +56,13 @@ body {
   width: 0px;
 }
 .height-half{
-  min-height: 50vh;
+  height: 50vh;
+  overflow: auto;
 }
-
+.height-half::-webkit-scrollbar {
+  background: transparent; /* make scrollbar transparent */
+  width: 0px;
+}
 .table-container table{
 background: var(--light-black-s);
 color: #ffffff;
@@ -68,10 +72,15 @@ color: #ffffff;
 } 
 .table-container tr{
   border-bottom: 1px solid #6e6e6e; 
+  text-align: center;
 }
 .timestamp{
   color: #b9b9b9;
   font-size: 0.8rem;
+}
+.cancel{
+  color: #b9b9b9;
+  cursor: pointer;
 }
 .success{
   color: #009b00;
