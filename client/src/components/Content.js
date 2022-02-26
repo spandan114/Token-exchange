@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadOrders } from '../redux/interactions'
+import MyTransactions from './MyTransactions'
 import Orders from './Orders'
 import Trades from './Trades'
 
@@ -41,7 +42,9 @@ const Content = () => {
         </div>
         <div className="card height-half">
           <h5 className="card-header">My Transactions</h5>
-          <div className="card-body"></div>
+          <div className="card-body">
+            <MyTransactions/>
+          </div>
         </div>
       </div>
       <div className="card-sm">

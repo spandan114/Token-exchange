@@ -62,7 +62,6 @@ export const markColourTag = (order, prevOrder) => {
       tokenPriceClass: "success",
     };
   }
-
   if (prevOrder.tokenPrice <= order.tokenPrice) {
     return {
       ...order,
@@ -78,7 +77,6 @@ export const markColourTag = (order, prevOrder) => {
 
 
 export const filterAllOrders = (orders) =>{
-
     //Remove all canceled & filled Orders
     var all = orders.orders;
     var filled = orders.filledOrders;
@@ -88,7 +86,6 @@ export const filterAllOrders = (orders) =>{
         var canceledOrder = canceled.some(O => O.returnValues.id === order.returnValues.id)
         return(filledOrders || canceledOrder)
     })
-
     openOrders = decorateOrderBookOrder(openOrders)
     openOrders = _.groupBy( openOrders, "orderType" )
 
@@ -103,7 +100,6 @@ export const filterAllOrders = (orders) =>{
         ...openOrders,
         sellOrders:sellOrders.sort((a, b) => b.tokenPrice - a.tokenPrice)
     }
-
     return openOrders    
 }
 
@@ -116,14 +112,44 @@ const decorateOrderBookOrder = (orders) =>{
 }
 
 export const markPunchesTag = (order) => {
-  
     const orderType = order.returnValues.tokenGive === ETHER_ADDRESS?"buy":"sell"
-
       return {
         ...order,
         orderType,
         orderTypeClass: orderType === "buy"?"success":"danger",
         orderFillClass:orderType === "buy"?"sell":"buy"
       };
-    
   };
+
+  export const myFilledOrders = (filledOrders,account) =>{
+    filledOrders = filledOrders.filter(o=> o.returnValues.user === account )
+    filledOrders = filledOrders.sort((a, b) => a.returnValues.timestamp - b.returnValues.timestamp);
+    filledOrders = decorateFilledOrder(filledOrders,account);
+    return filledOrders
+  }
+
+  const decorateFilledOrder = (orders,account) =>{
+    return orders.map((order) => {
+        order = beautifyFilledData(order);
+        order = markFilledOrderStatusTag(order,account);
+        return order;
+      });
+}
+
+export const markFilledOrderStatusTag = (order,account) => {
+
+  const myOrder = order.returnValues.user === account
+  var orderType;
+  if(myOrder){
+    orderType = order.returnValues.tokenGive === ETHER_ADDRESS?"buy":"sell"
+  }else{
+    orderType = order.returnValues.tokenGive === ETHER_ADDRESS?"sell":"buy"
+  }
+   
+    return {
+      ...order,
+      orderType,
+      orderTypeClass: orderType === "buy"?"success":"danger",
+      orderSign:orderType === "buy"?"+":"-"
+    };
+};
