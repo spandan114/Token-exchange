@@ -181,3 +181,40 @@ export const markFilledOrderStatusTag = (order,account) => {
       orderSign:orderType === "buy"?"+":"-"
     };
 };
+
+export const formatCandleChartData = (orders) =>{
+
+  orders = orders.sort((a, b) => a.returnValues.timestamp - b.returnValues.timestamp)
+  orders = orders.map((order) => beautifyFilledData(order))
+  var [secondLastOrder,lastOrder] = orders.slice(orders.length -2 ,orders.length)
+  var lastPrice = _.get(lastOrder,'tokenPrice',0)
+  var secondLastPrice = _.get(secondLastOrder,'tokenPrice',0)
+
+return {
+  lastPrice,
+  lastPriceChange: lastPrice >= secondLastPrice ? "+" : "-",
+  series:[{
+  data: createChartData(orders)
+  }]
+}
+}
+
+const createChartData = (orders) =>{
+
+  orders = _.groupBy( orders, (o)=>(moment.unix(o.returnValues.timestamp).startOf("hour").format()) )
+  var hours = Object.keys(orders)
+  var chartData = hours.map(hour=>{
+    //calculate open,high,low,close price
+    var orderData = orders[hours]
+    var open = orderData[0]
+    var high = _.maxBy(orderData,"tokenPrice")
+    var low = _.minBy(orderData,"tokenPrice")
+    var close = orderData[orderData.length - 1]
+
+    return({
+      x:new Date(hour),
+      y:[open.tokenPrice,high.tokenPrice,low.tokenPrice,close.tokenPrice]
+    })
+  })
+  return chartData
+}

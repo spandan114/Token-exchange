@@ -1,17 +1,29 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { chartOptions, dummyData } from "../utils/chartConfig";
+import { useSelector } from "react-redux";
+import { chartOptions } from "../utils/chartConfig";
+import { formatCandleChartData } from "../utils/helper";
+import Spinner from "./Spinner";
 
 const CandleChart = () => {
+
+    const filledOrders = useSelector((state) => state.exchangeReducer.filledOrders);
+
+
   return (
     <div className="price-chart">
       <div className="price">
         <div id="chart">
-          <Chart
-            options={chartOptions}
-            series={dummyData}
-            type="candlestick"
-          />
+            {
+                filledOrders?
+                <Chart
+                options={chartOptions}
+                series={formatCandleChartData(filledOrders).series}
+                type="candlestick"
+              />
+              :<Spinner/>
+            }
+
         </div>
       </div>
     </div>
