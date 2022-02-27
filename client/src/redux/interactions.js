@@ -4,6 +4,7 @@ import {
   canceledOrderLoaded,
   exchangeContractLoaded,
   filledOrderLoaded,
+  orderCanceled,
   tokenContractLoaded,
   web3Loaded,
 } from "./actions";
@@ -43,7 +44,7 @@ export const loadExchangeContract = async (web3, dispatch) => {
       "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
     );
     dispatch(exchangeContractLoaded(tokenContract));
-    return null;
+    return tokenContract;
   } catch (error) {
     alert("Something went wrong token contract not loaded !");
   }
@@ -77,10 +78,10 @@ dispatch(canceledOrderLoaded(canceledOrders));
 }
 
 export const cancelOrder = async (exchangeContract, dispatch,order,account,onSuccess,onError) => {
-  console.log(order.returnValues.id)
   await exchangeContract.methods.cancelOrder(String(order.returnValues.id)).send({from:account})
-    .on('transactionHash', function(hash){
-        console.log(hash)
+   .on('receipt', function(receipt){ 
+      dispatch(orderCanceled(receipt.events.CancelOrder));
+      onSuccess()
     })
     .on('error', function(error){ 
       onError(error.message)

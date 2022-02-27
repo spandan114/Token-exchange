@@ -6,13 +6,11 @@ export const web3Reducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
     case "WEB3_LOADER":
-      console.log(action);
       return {
         ...state,
         connection: action.payload,
       };
     case "WEB3_ACCOUNT_LOADER":
-      console.log(action);
       return {
         ...state,
         account: action.payload,
@@ -58,6 +56,14 @@ export const exchangeReducer = (state = initialState, action) => {
         ...state,
         filledOrders: action.payload,
       };
+      case "CANCEL_ORDER":
+        return {
+          ...state,
+          canceledOrders: [
+            ...state.canceledOrders,
+            action.payload
+          ],
+        };
     default:
       return state;
   }

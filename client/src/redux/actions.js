@@ -46,3 +46,10 @@ export const allOrderLoaded = (filledOrders) => {
         payload:filledOrders
      }
 }
+
+export const orderCanceled = (order) => {
+    return {
+        type:"CANCEL_ORDER",
+        payload:order
+     }
+}
