@@ -1,13 +1,46 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { cancelOrder } from '../redux/interactions';
 import { filterTradeOrders} from '../utils/helper'
 import Spinner from './Spinner';
 
 const MyTransactions = () => {
 
+  const dispatch = useDispatch()
+
   const allOrders = useSelector((state) => state.exchangeReducer);
+  const exchangeContract = useSelector((state) => state.exchangeReducer.exchangeContract);
   const account = useSelector((state) => state.web3Reducer.account);
   var validator = (allOrders.hasOwnProperty("filledOrders") && allOrders.hasOwnProperty("orders") && allOrders.hasOwnProperty("canceledOrders"))
+
+  const cancel = (order) =>{
+    const onSuccess = () =>{
+      toast.success('Order canceled successfully !', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+        
+    }
+    const onError = (msg) =>{
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }
+    cancelOrder(exchangeContract, dispatch,order,account,onSuccess,onError)
+  }
+
   return (
     <div className='transactions'>
       <ul className="nav nav-tabs">
@@ -65,7 +98,9 @@ const MyTransactions = () => {
               <tr key={i}> 
               <td className={`text-${data.orderTypeClass}`}>{data.tokenAmount}</td>
               <td className={`text-${data.orderTypeClass}`}>{data.tokenPrice}</td>
-              <td className='cancel'>X</td>
+              <td className='cancel'
+              onClick={()=> cancel(data)}
+              >X</td>
             </tr>
             ))
             :<Spinner/>

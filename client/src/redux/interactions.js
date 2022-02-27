@@ -75,3 +75,14 @@ dispatch(filledOrderLoaded(filledOrders));
 dispatch(canceledOrderLoaded(canceledOrders));
 
 }
+
+export const cancelOrder = async (exchangeContract, dispatch,order,account,onSuccess,onError) => {
+  console.log(order.returnValues.id)
+  await exchangeContract.methods.cancelOrder(String(order.returnValues.id)).send({from:account})
+    .on('transactionHash', function(hash){
+        console.log(hash)
+    })
+    .on('error', function(error){ 
+      onError(error.message)
+    })
+}

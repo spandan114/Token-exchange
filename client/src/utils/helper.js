@@ -81,6 +81,7 @@ export const filterAllOrders = (orders) =>{
     var all = orders.orders;
     var filled = orders.filledOrders;
     var canceled = orders.canceledOrders;
+    
     var openOrders = _.reject(all,(order)=>{
         var filledOrders = filled.some(O => O.returnValues.id === order.returnValues.id)
         var canceledOrder = canceled.some(O => O.returnValues.id === order.returnValues.id)
@@ -137,6 +138,7 @@ export const markPunchesTag = (order) => {
         var canceledOrder = canceled.some(O => O.returnValues.id === order.returnValues.id)
         return(filledOrders || canceledOrder)
     })
+    
     openOrders = decorateOpenOrder(openOrders)
     var filledOrders = decorateFilledOrder(filled)
     var myTrades = {

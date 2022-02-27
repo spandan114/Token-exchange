@@ -129,7 +129,7 @@ function cancelOrder(uint orderId) public {
   //Order must be exists
   require(_order.id == orderId,"Order not exists");
   canceldOrders[orderId]=true;
-  emit CancelOrder(orderCount,msg.sender,_order.tokenGet,_order.tokenGive,_order.amountGet,_order.amountGive,_order.timestamp);
+  emit CancelOrder(_order.id,msg.sender,_order.tokenGet,_order.tokenGive,_order.amountGet,_order.amountGive,_order.timestamp);
 }
 
 function fillOrder(uint orderId) public {
