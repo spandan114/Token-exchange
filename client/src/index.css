@@ -91,3 +91,24 @@ color: #ffffff;
   font-weight: 500;
 }
 
+.card-body .price-chart {
+  height:100%;
+}
+.card-body .price {
+  height:100%;
+}
+
+.chart{
+    height: 100%;
+    width: 100%;
+    color: #fff;
+}
+
+text {
+  font-family: Helvetica, Arial, sans-serif;
+  text-anchor: end;
+  dominant-baseline: auto;
+  font-size: 0.7rem;
+  font-weight: 400;
+  fill: #ffffff !important;
+}
