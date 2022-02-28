@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadOrders } from '../redux/interactions'
+import { loadOrders, subscribeEvents } from '../redux/interactions'
 import MyTransactions from './MyTransactions'
 import Orders from './Orders'
 import PriceChart from './PriceChart'
@@ -12,7 +12,8 @@ const Content = () => {
 
     useEffect(() => {
         if(exchange){
-        loadOrders(exchange,dispatch)
+          loadOrders(exchange,dispatch)
+          subscribeEvents(exchange,dispatch)
         }
     }, [exchange])
     

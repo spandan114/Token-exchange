@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { fillOrder } from '../redux/interactions';
@@ -11,6 +11,7 @@ const Orders = () => {
     const exchangeContract = useSelector((state) => state.exchangeReducer.exchangeContract);
     const account = useSelector((state) => state.web3Reducer.account);
     var validator = (AllOrders.hasOwnProperty("filledOrders") && AllOrders.hasOwnProperty("orders") && AllOrders.hasOwnProperty("canceledOrders"))
+    
 
     const fill = (order) =>{
       const onSuccess = () =>{
@@ -36,7 +37,7 @@ const Orders = () => {
           progress: undefined,
           });
       }
-      fillOrder(exchangeContract,dispatch,order,account,onSuccess,onError)
+      fillOrder(exchangeContract,order,account,onSuccess,onError)
     }
 
   return (

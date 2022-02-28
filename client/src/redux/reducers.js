@@ -56,14 +56,22 @@ export const exchangeReducer = (state = initialState, action) => {
         ...state,
         filledOrders: action.payload,
       };
-      case "CANCEL_ORDER":
-        return {
-          ...state,
-          canceledOrders: [
-            ...state.canceledOrders,
-            action.payload
-          ],
-        };
+    case "CANCEL_ORDER":
+      return {
+        ...state,
+        canceledOrders: [
+          ...state.canceledOrders,
+          action.payload
+        ],
+      };
+    case "FILL_ORDER":
+      return {
+        ...state,
+        filledOrders: [
+          ...state.filledOrders,
+          action.payload
+        ],
+      };
     default:
       return state;
   }

@@ -39,7 +39,7 @@ const MyTransactions = () => {
         progress: undefined,
         });
     }
-    cancelOrder(exchangeContract, dispatch,order,account,onSuccess,onError)
+    cancelOrder(exchangeContract, order,account,onSuccess,onError)
   }
 
   return (

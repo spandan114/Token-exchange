@@ -5,6 +5,7 @@ import {
   exchangeContractLoaded,
   filledOrderLoaded,
   orderCanceled,
+  orderFilled,
   tokenContractLoaded,
   web3Loaded,
 } from "./actions";
@@ -77,10 +78,20 @@ dispatch(canceledOrderLoaded(canceledOrders));
 
 }
 
-export const cancelOrder = async (exchangeContract, dispatch,order,account,onSuccess,onError) => {
+export const subscribeEvents = (exchangeContract,dispatch) =>{
+  exchangeContract.events.CancelOrder({},(err,event)=>{
+    dispatch(orderCanceled(event));
+  })
+
+  exchangeContract.events.FillOrder({},(err,event)=>{
+    dispatch(orderFilled(event));
+  })
+
+}
+
+export const cancelOrder = async (exchangeContract, order,account,onSuccess,onError) => {
   await exchangeContract.methods.cancelOrder(String(order.returnValues.id)).send({from:account})
    .on('receipt', function(receipt){ 
-      dispatch(orderCanceled(receipt.events.CancelOrder));
       onSuccess()
     })
     .on('error', function(error){ 
@@ -88,10 +99,9 @@ export const cancelOrder = async (exchangeContract, dispatch,order,account,onSuc
     })
 }
 
-export const fillOrder = async (exchangeContract, dispatch,order,account,onSuccess,onError) => {
+export const fillOrder = async (exchangeContract, order,account,onSuccess,onError) => {
   await exchangeContract.methods.fillOrder(String(order.returnValues.id)).send({from:account})
    .on('receipt', function(receipt){ 
-      // dispatch(orderCanceled(receipt.events.CancelOrder));
       onSuccess()
     })
     .on('error', function(error){ 

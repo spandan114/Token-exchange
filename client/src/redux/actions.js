@@ -53,3 +53,10 @@ export const orderCanceled = (order) => {
         payload:order
      }
 }
+
+export const orderFilled = (order) => {
+    return {
+        type:"FILL_ORDER",
+        payload:order
+     }
+}
