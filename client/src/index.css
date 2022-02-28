@@ -4,6 +4,10 @@
   --light-black-s: #3f4944;
   --light-black-p: #303a36;
   --primary-green: #2FA465;
+  --white: #ffffff;
+  --border: #6e6e6e;
+  --success: #3ADA84;
+  --danger: #FF7272;
 }
 body {
   background: var(--black);
@@ -20,10 +24,10 @@ body {
 }
 
 .text-danger{
-  color: #FF7272 !important;
+  color: var(--danger) !important;
 }
 .text-success{
-  color: var(--primary-green) !important;
+  color: var(--success) !important;
 }
 
 .card-sm{
@@ -34,7 +38,7 @@ body {
 }
 .card{
   background: var(--light-black-s);
-  color: #ffffff;
+  color: var(--white);
   margin: 0.3rem !important;
 }
 .card-header{
@@ -42,22 +46,22 @@ body {
 }
 .navbar{
   background: var(--primary-green);
-  color: #ffffff;
+  color: var(--white);
   padding: 0 2rem !important;
 }
 .navbar-brand{
-  color: #ffffff;
+  color: var(--white);
   font-weight: 700;
 }
 .navbar-brand:hover{
-  color: #ffffff;
+  color: var(--white);
 }
 .nav-link{
-  color: #ffffff;
+  color: var(--white);
   cursor: pointer;
 }
 .nav-link:hover{
-  color: #ffffff;
+  color: var(--white);
 }
 .height-full{
   height: 100vh;
@@ -77,13 +81,13 @@ body {
 }
 .table-container table{
 background: var(--light-black-s);
-color: #ffffff;
+color: var(--white);
 }
 .table-container thead {
-  border-bottom: 1px solid #6e6e6e; 
+  border-bottom: 1px solid var(--border); 
 } 
 .table-container tr{
-  border-bottom: 1px solid #6e6e6e; 
+  border-bottom: 1px solid var(--border); 
   text-align: center;
 }
 .timestamp{
@@ -100,14 +104,6 @@ color: #ffffff;
   color: #b9b9b9;
   cursor: pointer;
 }
-.success{
-  color: #009b00;
-  font-weight: 500;
-}
-.danger{
-  color: #e60000;
-  font-weight: 500;
-}
 
 .card-body .price-chart {
   height:100%;
@@ -119,7 +115,7 @@ color: #ffffff;
 .chart{
     height: 100%;
     width: 100%;
-    color: #fff;
+    color: var(--white);
 }
 
 text {
@@ -128,13 +124,13 @@ text {
   dominant-baseline: auto;
   font-size: 0.7rem;
   font-weight: 400;
-  fill: #ffffff !important;
+  fill: var(--white) !important;
 }
 
 .nav-tabs .nav-item .nav-link{
   background: none !important;
   border: none;
-  color: #ffffff;
+  color: var(--white);
 }
 .nav-tabs .nav-item .active{
   font-weight: bolder !important;
