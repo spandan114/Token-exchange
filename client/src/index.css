@@ -14,6 +14,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.btn-success{
+  background: var(--primary-green) !important;
+}
+
+.text-danger{
+  color: #FF7272 !important;
+}
+.text-success{
+  color: var(--primary-green) !important;
+}
+
 .card-sm{
   width: 20%;
 }
@@ -117,4 +129,26 @@ text {
   font-size: 0.7rem;
   font-weight: 400;
   fill: #ffffff !important;
+}
+
+.nav-tabs .nav-item .nav-link{
+  background: none !important;
+  border: none;
+  color: #ffffff;
+}
+.nav-tabs .nav-item .active{
+  font-weight: bolder !important;
+  border-bottom: 3px solid #a6ffd0 !important;
+}
+
+.balances .card-body{
+  padding: 0.6rem !important;
+}
+
+.new-order .card-body{
+  padding: 0.6rem !important;
+}
+
+.new-order .card-body button{
+   width: 100% !important;
 }
