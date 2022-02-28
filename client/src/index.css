@@ -78,6 +78,12 @@ color: #ffffff;
   color: #b9b9b9;
   font-size: 0.8rem;
 }
+
+.order td{
+  cursor: pointer;
+  text-align: start;
+}
+
 .cancel{
   color: #b9b9b9;
   cursor: pointer;

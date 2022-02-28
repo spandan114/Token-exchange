@@ -207,7 +207,7 @@ const createChartData = (orders) =>{
   var hours = Object.keys(orders)
   var chartData = hours.map(hour=>{
     //calculate open,high,low,close price
-    var orderData = orders[hours]
+    var orderData = orders[hour]
     var open = orderData[0]
     var high = _.maxBy(orderData,"tokenPrice")
     var low = _.minBy(orderData,"tokenPrice")

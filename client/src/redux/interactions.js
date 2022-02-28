@@ -87,3 +87,14 @@ export const cancelOrder = async (exchangeContract, dispatch,order,account,onSuc
       onError(error.message)
     })
 }
+
+export const fillOrder = async (exchangeContract, dispatch,order,account,onSuccess,onError) => {
+  await exchangeContract.methods.fillOrder(String(order.returnValues.id)).send({from:account})
+   .on('receipt', function(receipt){ 
+      // dispatch(orderCanceled(receipt.events.CancelOrder));
+      onSuccess()
+    })
+    .on('error', function(error){ 
+      onError(error.message)
+    })
+}
