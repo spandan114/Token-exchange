@@ -141,11 +141,7 @@ text {
   border-bottom: 3px solid #a6ffd0 !important;
 }
 
-.balances .card-body{
-  padding: 0.6rem !important;
-}
-
-.new-order .card-body{
+ .card-body{
   padding: 0.6rem !important;
 }
 
