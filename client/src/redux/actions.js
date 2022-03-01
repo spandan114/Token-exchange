@@ -75,6 +75,13 @@ export const exchangeEtherBalanceLoaded = (balance) => {
      }
 }
 
+export const depositeEtherExchange = (balance) => {
+    return {
+        type:"DEPOSITE_EXCHANGE_ETHER_BALANCE",
+        payload:balance
+     }
+}
+
 export const walletEtherBalanceLoaded = (balance) => {
     return {
         type:"LOAD_WALLET_BALANCE",

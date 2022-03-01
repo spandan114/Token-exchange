@@ -11,7 +11,8 @@ import {
   walletTokenBalanceLoaded,
   walletEtherBalanceLoaded,
   exchangeEtherBalanceLoaded,
-  exchangeTokenBalanceLoaded
+  exchangeTokenBalanceLoaded,
+  depositeEtherExchange
 } from "./actions";
 import Web3 from "web3";
 import ExchangeContract from "../artifacts/contracts/Exchange.sol/Exchange.json";
@@ -109,6 +110,10 @@ export const subscribeEvents = (exchangeContract,dispatch) =>{
     dispatch(orderFilled(event));
   })
 
+  exchangeContract.events.Deposite({},(err,event)=>{
+    dispatch(depositeEtherExchange(formatBalance(event.returnValues.balance)))
+  })
+
 }
 
 export const cancelOrder = async (exchangeContract, order,account,onSuccess,onError) => {
@@ -123,10 +128,20 @@ export const cancelOrder = async (exchangeContract, order,account,onSuccess,onEr
 
 export const fillOrder = async (exchangeContract, order,account,onSuccess,onError) => {
   await exchangeContract.methods.fillOrder(String(order.returnValues.id)).send({from:account})
-   .on('receipt', function(receipt){ 
+   .on('transactionHash', function(receipt){ 
       onSuccess()
     })
     .on('error', function(error){ 
       onError(error.message)
     })
+}
+
+export const depositeEther = async(web3,etherAmount,exchangeContract,account,onSuccess,onError) =>{
+  await exchangeContract.methods.depositeEther().send({from:account,value:web3.utils.toWei(etherAmount)})
+  .on('transactionHash', function(receipt){ 
+    onSuccess("success")
+  })
+  .on('error', function(error){ 
+    onError(error.message)
+  })
 }

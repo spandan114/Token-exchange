@@ -92,10 +92,16 @@ export const exchangeReducer = (state = initialState, action) => {
         ...state,
         etherBalance:action.payload
       };
+    case "DEPOSITE_EXCHANGE_ETHER_BALANCE":
+      return {
+        ...state,
+        etherBalance:action.payload
+      };
     default:
       return state;
   }
 };
+
 
 export default combineReducers({
   web3Reducer,

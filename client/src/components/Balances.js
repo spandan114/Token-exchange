@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadBalances } from "../redux/interactions";
+import { toast } from "react-toastify";
+import { depositeEther, loadBalances } from "../redux/interactions";
 import Spinner from "./Spinner";
 
 const Balances = () => {
 
   const dispatch = useDispatch()
+
+  const [depositeEtherAmount, setDepositeEtherAmount] = useState(0)
+
   const web3 = useSelector((state) => state.web3Reducer.connection);
   const account = useSelector((state) => state.web3Reducer.account);
   const tokenContract = useSelector((state) => state.tokenReducer.tokenContract);
@@ -23,6 +27,36 @@ const Balances = () => {
   const walletTokenBalance = useSelector((state) => state.tokenReducer.walletTokenBalance);
 
   var isLoaded = (exchangeEtherBalance && exchangeTokenBalance && walletEtherBalance && walletTokenBalance)
+
+  var etherDeposite = () =>{
+
+    const onSuccess = () =>{
+      toast.success(`Ether deposited successfully 🎊 !`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        }); 
+        setDepositeEtherAmount(0)
+    }
+
+    const onError = (msg) =>{
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }
+
+    depositeEther(web3,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
+  }
 
   return (
     <div>      
@@ -69,12 +103,15 @@ const Balances = () => {
                   className="form-control"
                   placeholder="Token amount"
                   aria-describedby="deposite-brownie"
+                  value={depositeEtherAmount}
+                  onChange={(e)=>setDepositeEtherAmount(e.target.value)}
                 />
                 <div className="input-group-append">
                   <button
                     className="btn btn-success"
                     type="button"
                     id="deposite-brownie"
+                    onClick={()=>etherDeposite()}
                   >
                     Deposite
                   </button>
