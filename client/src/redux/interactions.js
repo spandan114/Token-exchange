@@ -145,7 +145,7 @@ export const fillOrder = async (exchangeContract, order,account,onSuccess,onErro
 }
 
 export const depositeEther = async(web3,etherAmount,exchangeContract,account,onSuccess,onError) =>{
-  await exchangeContract.methods.depositeEther().send({from:account,value:web3.utils.toWei(etherAmount)})
+  await exchangeContract.methods.depositeEther().send({from:account,value: web3.utils.toWei(etherAmount, 'ether')})
   .on('transactionHash', function(receipt){ 
     onSuccess()
   })
@@ -155,7 +155,8 @@ export const depositeEther = async(web3,etherAmount,exchangeContract,account,onS
 }
 
 export const depositeToken = async(web3,tokenAddress,tokenAmount,exchangeContract,account,onSuccess,onError) =>{
-  tokenAmount = web3.utils.toWei(tokenAmount)
+  tokenAmount = web3.utils.toWei(tokenAmount, 'ether')
+  //TODO: Approve & demosite token
   await exchangeContract.methods.depositeToken(tokenAddress,tokenAmount).send({from:account})
   .on('transactionHash', function(receipt){ 
     onSuccess()
