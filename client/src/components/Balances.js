@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { depositeEther, loadBalances } from "../redux/interactions";
+import { depositeEther, depositeToken, loadBalances } from "../redux/interactions";
 import Spinner from "./Spinner";
 
 const Balances = () => {
@@ -9,6 +9,7 @@ const Balances = () => {
   const dispatch = useDispatch()
 
   const [depositeEtherAmount, setDepositeEtherAmount] = useState(0)
+  const [depositeTokenAmount, setDepositeTokenAmount] = useState(0)
 
   const web3 = useSelector((state) => state.web3Reducer.connection);
   const account = useSelector((state) => state.web3Reducer.account);
@@ -28,10 +29,10 @@ const Balances = () => {
 
   var isLoaded = (exchangeEtherBalance && exchangeTokenBalance && walletEtherBalance && walletTokenBalance)
 
-  var etherDeposite = () =>{
+  var deposite = (type) =>{
 
     const onSuccess = () =>{
-      toast.success(`Ether deposited successfully 🎊 !`, {
+      toast.success(`${type} deposited successfully 🎊 !`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -40,7 +41,11 @@ const Balances = () => {
         draggable: true,
         progress: undefined,
         }); 
+        if(type === "Ether"){
         setDepositeEtherAmount(0)
+        }else{
+          setDepositeTokenAmount(0)
+        }
     }
 
     const onError = (msg) =>{
@@ -55,7 +60,11 @@ const Balances = () => {
         });
     }
 
-    depositeEther(web3,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
+    if(type === "Ether"){
+      depositeEther(web3,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
+    }else{
+      depositeToken(web3,tokenContract.options.address,depositeTokenAmount,exchangeContract,account,onSuccess,onError)
+    }    
   }
 
   return (
@@ -111,7 +120,7 @@ const Balances = () => {
                     className="btn btn-success"
                     type="button"
                     id="deposite-brownie"
-                    onClick={()=>etherDeposite()}
+                    onClick={()=>deposite("Ether")}
                   >
                     Deposite
                   </button>
@@ -134,12 +143,15 @@ const Balances = () => {
                   className="form-control"
                   placeholder="Ether amount"
                   aria-describedby="deposite-ether"
+                  value={depositeTokenAmount}
+                  onChange={(e)=>setDepositeTokenAmount(e.target.value)}
                 />
                 <div className="input-group-append">
                   <button
                     className="btn btn-success"
                     type="button"
                     id="deposite-ether"
+                    onClick={()=>deposite("Token")}
                   >
                     Deposite
                   </button>
