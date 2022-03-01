@@ -15,6 +15,11 @@ export const web3Reducer = (state = initialState, action) => {
         ...state,
         account: action.payload,
       };
+    case "LOAD_WALLET_BALANCE":
+      return {
+        ...state,
+        walletEtherBalance: action.payload,
+      };
     default:
       return state;
   }
@@ -27,6 +32,11 @@ export const tokenReducer = (state = initialState, action) => {
       return {
         ...state,
         tokenContract: action.payload,
+      };
+    case "LOAD_TOKEN_BALANCE":
+      return {
+        ...state,
+        walletTokenBalance: action.payload,
       };
     default:
       return state;
@@ -71,6 +81,16 @@ export const exchangeReducer = (state = initialState, action) => {
           ...state.filledOrders,
           action.payload
         ],
+      };
+    case "LOAD_EXCHANGE_TOKEN_BALANCE":
+      return {
+        ...state,
+        tokenBalance:action.payload
+      };
+    case "LOAD_EXCHANGE_ETHER_BALANCE":
+      return {
+        ...state,
+        etherBalance:action.payload
       };
     default:
       return state;

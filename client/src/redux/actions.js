@@ -60,3 +60,32 @@ export const orderFilled = (order) => {
         payload:order
      }
 }
+
+export const exchangeTokenBalanceLoaded = (balance) => {
+    return {
+        type:"LOAD_EXCHANGE_TOKEN_BALANCE",
+        payload:balance
+     }
+}
+
+export const exchangeEtherBalanceLoaded = (balance) => {
+    return {
+        type:"LOAD_EXCHANGE_ETHER_BALANCE",
+        payload:balance
+     }
+}
+
+export const walletEtherBalanceLoaded = (balance) => {
+    return {
+        type:"LOAD_WALLET_BALANCE",
+        payload:balance
+     }
+}
+
+export const walletTokenBalanceLoaded = (balance) => {
+    return {
+        type:"LOAD_TOKEN_BALANCE",
+        payload:balance
+     }
+}
+

@@ -8,10 +8,15 @@ import {
   orderFilled,
   tokenContractLoaded,
   web3Loaded,
+  walletTokenBalanceLoaded,
+  walletEtherBalanceLoaded,
+  exchangeEtherBalanceLoaded,
+  exchangeTokenBalanceLoaded
 } from "./actions";
 import Web3 from "web3";
 import ExchangeContract from "../artifacts/contracts/Exchange.sol/Exchange.json";
 import TokenContract from "../artifacts/contracts/Token.sol/Token.json";
+import { ETHER_ADDRESS, formatBalance } from "../utils/helper";
 
 export const loadWeb3 = async (dispatch) => {
   const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
@@ -32,7 +37,7 @@ export const loadTokenContract = async (web3, dispatch) => {
       "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     );
     dispatch(tokenContractLoaded(tokenContract));
-    return null;
+    return tokenContract;
   } catch (error) {
     alert("Something went wrong token contract not loaded !");
   }
@@ -50,6 +55,23 @@ export const loadExchangeContract = async (web3, dispatch) => {
     alert("Something went wrong token contract not loaded !");
   }
 };
+
+export const loadBalances = async(web3,dispatch,tokenContact,exchangeContract,account) =>{
+   // Wallet ether balance
+   const walletEtherBalance = await web3.eth.getBalance(account)
+   // Wallet token balance
+   const walletTokenBalance = await tokenContact.methods.balanceOf(account).call()
+   // Exchange ether balance
+   const exchangeEtherBalance = await exchangeContract.methods.balanceOf(account,ETHER_ADDRESS).call()
+   // Exchange token balance
+   const exchangeTokenBalance = await exchangeContract.methods.balanceOf(account,tokenContact.options.address).call()
+
+    dispatch(walletEtherBalanceLoaded(formatBalance(walletEtherBalance)))
+    dispatch(exchangeEtherBalanceLoaded(formatBalance(exchangeEtherBalance)))
+    dispatch(walletTokenBalanceLoaded(formatBalance(walletTokenBalance)))
+    dispatch(exchangeTokenBalanceLoaded(formatBalance(exchangeTokenBalance)))
+
+}
 
 
 export const loadOrders = async (exchangeContract, dispatch) => {

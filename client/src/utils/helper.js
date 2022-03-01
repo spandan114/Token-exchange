@@ -10,6 +10,13 @@ export const ether = (wei) => {
 };
 export const token = (n) => ether(n);
 
+export const formatBalance = (n) =>{
+  const precision = 100; //2 decimal places
+  var balance = ether(n)
+  var balance = Math.round(balance * precision)/precision;
+  return balance
+}
+
 export const filterFilledOrder = (orders) => {
   orders = orders.sort(
     (a, b) => a.returnValues.timestamp - b.returnValues.timestamp
