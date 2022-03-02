@@ -113,10 +113,14 @@ export const subscribeEvents = (exchangeContract,dispatch) =>{
     dispatch(orderFilled(event));
   })
 
-  exchangeContract.events.Deposite({},(err,event)=>{
-      dispatch(balancesLoaded())
-  })
+  // exchangeContract.events.Deposite({},(err,event)=>{
+  //     dispatch(balancesLoaded())
+  // })
 
+  // exchangeContract.events.Withdraw({},(err,event)=>{
+  //   dispatch(balancesLoaded())
+  // })
+  
 }
 
 export const cancelOrder = async (exchangeContract, order,account,onSuccess,onError) => {
@@ -139,10 +143,19 @@ export const fillOrder = async (exchangeContract, order,account,onSuccess,onErro
     })
 }
 
-export const depositeEther = async(web3,dispatch,etherAmount,exchangeContract,account,onSuccess,onError) =>{
+export const depositeEther = async(web3,etherAmount,exchangeContract,account,onSuccess,onError) =>{
   await exchangeContract.methods.depositeEther().send({from:account,value: web3.utils.toWei(etherAmount, 'ether')})
   .on('transactionHash', function(receipt){ 
-    dispatch(reloadBalances())
+    onSuccess()
+  })
+  .on('error', function(error){ 
+    onError(error.message)
+  })
+}
+
+export const withdrawEther = async(web3,etherAmount,exchangeContract,account,onSuccess,onError) =>{
+  await exchangeContract.methods.withdrawEther(web3.utils.toWei(etherAmount, 'ether')).send({from:account})
+  .on('transactionHash', function(receipt){ 
     onSuccess()
   })
   .on('error', function(error){ 
@@ -162,6 +175,18 @@ export const depositeToken = async(web3,tokenContract,tokenAmount,exchangeContra
       .on('error', function(error){ 
         onError(error.message)
       })
+  })
+  .on('error', function(error){ 
+    onError(error.message)
+  })
+}
+
+export const withdrawToken = async(web3,tokenContract,tokenAmount,exchangeContract,account,onSuccess,onError) =>{
+  tokenAmount = web3.utils.toWei(tokenAmount, 'ether')
+
+  await exchangeContract.methods.withdrawToken(tokenContract.options.address,tokenAmount).send({from:account})
+  .on('transactionHash', function(hash){ 
+    onSuccess()
   })
   .on('error', function(error){ 
     onError(error.message)
