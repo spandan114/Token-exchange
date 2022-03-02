@@ -66,7 +66,7 @@ const Balances = () => {
     if(type === "Ether"){
       depositeEther(web3,dispatch,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
     }else{
-      depositeToken(web3,tokenContract.options.address,depositeTokenAmount,exchangeContract,account,onSuccess,onError)
+      depositeToken(web3,tokenContract,depositeTokenAmount,exchangeContract,account,onSuccess,onError)
     }    
   }
 
