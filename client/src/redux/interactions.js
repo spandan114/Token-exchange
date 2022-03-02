@@ -192,3 +192,33 @@ export const withdrawToken = async(web3,tokenContract,tokenAmount,exchangeContra
     onError(error.message)
   })
 }
+
+export const buyToken = async(web3,dispatch,buyAmount,buyPrice,tokenContract,exchangeContract,account,onSuccess,onError) =>{
+
+  var tokenGet = web3.utils.toWei(buyAmount, 'ether');
+  //Ex: i want to buy 10 token each token price is 0.001 then 10 token = 10 * 0.01
+  var etherGive = web3.utils.toWei((buyAmount*buyPrice).toString(), 'ether') 
+
+  await exchangeContract.methods.makeOrder(ETHER_ADDRESS,etherGive,tokenContract.options.address,tokenGet).send({from:account})
+  .on('transactionHash', function(receipt){ 
+    onSuccess()
+  })
+  .on('error', function(error){ 
+    onError(error.message)
+  })
+}
+
+export const sellToken = async(web3,dispatch,sellAmount,sellPrice,tokenContract,exchangeContract,account,onSuccess,onError) =>{
+
+  var tokenGive= web3.utils.toWei(sellAmount, 'ether');
+  //Ex: i want to sell 10 token each token price is 0.001 then 10 token = 10 * 0.01
+  var etherGet = web3.utils.toWei((sellAmount*sellPrice).toString(), 'ether')
+
+  await exchangeContract.methods.makeOrder(tokenContract.options.address,tokenGive,ETHER_ADDRESS,etherGet).send({from:account})
+  .on('transactionHash', function(receipt){ 
+    onSuccess()
+  })
+  .on('error', function(error){ 
+    onError(error.message)
+  })
+}
