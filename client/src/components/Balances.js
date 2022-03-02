@@ -15,19 +15,20 @@ const Balances = () => {
   const account = useSelector((state) => state.web3Reducer.account);
   const tokenContract = useSelector((state) => state.tokenReducer.tokenContract);
   const exchangeContract = useSelector((state) => state.exchangeReducer.exchangeContract);
+  const isBalancesLoading = useSelector((state) => state.exchangeReducer.balancesLoading);
 
   useEffect(() => {
     if(web3 && tokenContract && exchangeContract && account){
     loadBalances(web3,dispatch,tokenContract,exchangeContract,account)
     }
   }, [web3 && tokenContract && exchangeContract && account])
+
   
   const exchangeEtherBalance = useSelector((state) => state.exchangeReducer.etherBalance);
   const exchangeTokenBalance = useSelector((state) => state.exchangeReducer.tokenBalance);
   const walletEtherBalance = useSelector((state) => state.web3Reducer.walletEtherBalance);
   const walletTokenBalance = useSelector((state) => state.tokenReducer.walletTokenBalance);
 
-  var isLoaded = (exchangeEtherBalance && exchangeTokenBalance && walletEtherBalance && walletTokenBalance)
 
   var deposite = (type) =>{
 
@@ -42,10 +43,12 @@ const Balances = () => {
         progress: undefined,
         }); 
         if(type === "Ether"){
-        setDepositeEtherAmount(0)
+         setDepositeEtherAmount(0)
         }else{
           setDepositeTokenAmount(0)
         }
+        //Reload ether balance
+        loadBalances(web3,dispatch,tokenContract,exchangeContract,account)
     }
 
     const onError = (msg) =>{
@@ -61,7 +64,7 @@ const Balances = () => {
     }
 
     if(type === "Ether"){
-      depositeEther(web3,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
+      depositeEther(web3,dispatch,depositeEtherAmount,exchangeContract,account,onSuccess,onError)
     }else{
       depositeToken(web3,tokenContract.options.address,depositeTokenAmount,exchangeContract,account,onSuccess,onError)
     }    
@@ -87,7 +90,7 @@ const Balances = () => {
           id="deposite"
         >
           {
-          isLoaded?
+          !isBalancesLoading ?
             <div>
             <table className="table table-borderless ">
             <thead>

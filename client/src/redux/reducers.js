@@ -82,6 +82,10 @@ export const exchangeReducer = (state = initialState, action) => {
           action.payload
         ],
       };
+    case 'BALANCES_LOADING':
+      return { ...state, balancesLoading: true }
+    case 'BALANCES_LOADED':
+        return { ...state, balancesLoading: false }
     case "LOAD_EXCHANGE_TOKEN_BALANCE":
       return {
         ...state,
