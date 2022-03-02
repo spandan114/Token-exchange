@@ -82,6 +82,14 @@ export const exchangeReducer = (state = initialState, action) => {
           action.payload
         ],
       };
+    case "ORDER_CREATED":
+      return {
+        ...state,
+        orders: [
+          ...state.orders,
+          action.payload
+        ],
+      };
     case 'BALANCES_LOADING':
       return { ...state, balancesLoading: true }
     case 'BALANCES_LOADED':

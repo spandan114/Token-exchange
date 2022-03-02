@@ -13,7 +13,8 @@ import {
   exchangeEtherBalanceLoaded,
   exchangeTokenBalanceLoaded,
   balancesLoaded,
-  reloadBalances
+  reloadBalances,
+  createOrder
 } from "./actions";
 import Web3 from "web3";
 import ExchangeContract from "../artifacts/contracts/Exchange.sol/Exchange.json";
@@ -111,6 +112,10 @@ export const subscribeEvents = (exchangeContract,dispatch) =>{
 
   exchangeContract.events.FillOrder({},(err,event)=>{
     dispatch(orderFilled(event));
+  })
+
+  exchangeContract.events.Order({}, (error, event) => {
+    dispatch(createOrder(event))
   })
 
   // exchangeContract.events.Deposite({},(err,event)=>{

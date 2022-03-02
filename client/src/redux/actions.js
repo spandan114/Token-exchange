@@ -101,3 +101,9 @@ export const walletTokenBalanceLoaded = (balance) => {
      }
 }
 
+export const createOrder = (order) =>{
+    return {
+        type:"ORDER_CREATED",
+        payload:order
+     }
+}
