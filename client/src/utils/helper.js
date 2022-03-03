@@ -211,7 +211,7 @@ return {
 
 const createChartData = (orders) =>{
 
-  orders = _.groupBy( orders, (o)=>(moment.unix(o.returnValues.timestamp).startOf("hour").format()) )
+  orders = _.groupBy( orders, (o)=>(moment.unix(o.returnValues.timestamp).startOf("minute").format()) )
   var hours = Object.keys(orders)
   var chartData = hours.map(hour=>{
     //calculate open,high,low,close price

@@ -20,7 +20,7 @@ const seed = async(tokenContract,exchangeContract) => {
     // const Token = await ethers.getContractFactory("Token");
     // const Exchange = await ethers.getContractFactory("Exchange");
 
-    const depositeETH = ether("50");
+    const depositeETH = ether("5000");
 
     // var tokenContract = await Token.deploy();
     // var exchangeContract = await Exchange.deploy(deployer.address, 10);
@@ -36,7 +36,7 @@ const seed = async(tokenContract,exchangeContract) => {
     await exchangeContract.connect(user4).depositeEther({ value: depositeETH });
     await exchangeContract
       .connect(receiver)
-      .depositeToken(tokenContract.address, tokens(200));
+      .depositeToken(tokenContract.address, tokens(10000));
 
     var result;
     var event;
@@ -52,46 +52,44 @@ const seed = async(tokenContract,exchangeContract) => {
 
     await wait(20);
     // Make & Fill orders
+
+    for (i = 1; i <= 15; i++) {
+      console.log("Buy token start")
     result = await exchangeContract
       .connect(receiver)
       .makeOrder(
         tokenContract.address,
-        tokens(50),
+        tokens(10*i),
         ETHER,
-        ether(0.20)
+        ether(0.01*i)
       );
     event = await result.wait();
     orderId = event.events[0].args.id;
+    console.log(orderId)
     await exchangeContract.connect(user4).fillOrder(orderId);
+    await wait(1000*i);
+    console.log("Buy token end")
+  }
 
-    await wait(20);
+    await wait(30000);
 
+    for (i = 1; i <= 15; i++) {
+      console.log("sell token start")
     result = await exchangeContract
-      .connect(receiver)
+      .connect(user4)
       .makeOrder(
-        tokenContract.address,
-        tokens(30),
         ETHER,
-        ether(0.12)
+        ether(0.01*i),
+        tokenContract.address,
+        tokens(10*i)
       );
     event = await result.wait();
     orderId = event.events[0].args.id;
-    await exchangeContract.connect(user4).fillOrder(orderId);
-
-    await wait(20);
-
-    result = await exchangeContract
-      .connect(receiver)
-      .makeOrder(
-        tokenContract.address,
-        tokens(80),
-        ETHER,
-        ether(0.22)
-      );
-    event = await result.wait();
-    orderId = event.events[0].args.id;
-    await exchangeContract.connect(user4).fillOrder(orderId);
-
+    console.log(orderId)
+    await exchangeContract.connect(receiver).fillOrder(orderId);
+    await wait(1000*i);
+    console.log("Sell token end")
+  }
 
 
 
