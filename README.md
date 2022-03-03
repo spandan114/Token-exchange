@@ -1,18 +1,18 @@
 # Token exchange :money_mouth_face:
-Basic ERC-20 token (Brownie token ) exchange .
+decentralized ERC-20 token (Brownie token ) exchange .
 
 <img src="./TokenExchange.png" alt="Exchange image">
 
-#### Tech stack & modules used :man_technologist:
+### Tech stack & modules used :man_technologist:
 - React.js ,solidity ,hardhat ,mocha, chai, ether.js, web3.js,lodash, apexcharts & waffle
-#### Token exchange features :tada:
+### Token exchange features :tada:
 - [x] Deposite & withdraw ether.
 - [x] Deposite & withdraw token.
 - [x] Buy & sell token.
 - [x] Maintain trade (Create order,fill order & cancel order).
 - [x] Realtime updates.
 
-#### How to run :runner: :
+### How to run :runner: :
 ----------------
 - Run hardhat node
     ```
@@ -32,7 +32,7 @@ Basic ERC-20 token (Brownie token ) exchange .
     cd client
     npm start
     ```
-#### Web3.js 
+### Web3.js 
 ------------
 - [Load web3](https://web3js.readthedocs.io/en/v1.2.11/web3-eth.html#web3-eth)
 - [Connect with contract](https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html#web3-eth-contract)
@@ -55,7 +55,7 @@ Basic ERC-20 token (Brownie token ) exchange .
     contractName.getPastEvents(EventName[, options][, callback])
     ```
 
-#### Hardhat commands
+### Hardhat commands
 ```shell
 npx hardhat accounts
 npx hardhat compile
