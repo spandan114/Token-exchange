@@ -1,4 +1,5 @@
 import moment from "moment";
+import Web3 from 'web3';
 var _ = require('lodash');
 export const ETHER_ADDRESS = "0x0000000000000000000000000000000000000000";
 const DECIMAL = 10 ** 18;
@@ -227,3 +228,28 @@ const createChartData = (orders) =>{
   })
   return chartData
 }
+
+export const connectWithWallet = async () => {
+  //connect web3 with http provider
+  if (window.ethereum) {
+   window.ethereum.request({method:"eth_requestAccounts"})
+   .then(res=>{
+    window.location.reload();
+   }).catch(error=>{
+     alert(error.message)
+   })
+  } else {
+    window.alert(
+      "Non-Ethereum browser detected. You should consider trying MetaMask!"
+    );
+  }
+};
+
+const chainOrAccountChangedHandler = () => {
+  // reload the page to avoid any errors with chain or account change.
+  window.location.reload();
+}
+	// listen for account changes
+	window.ethereum.on('accountsChanged', chainOrAccountChangedHandler);
+ // Listen for chain change
+	window.ethereum.on('chainChanged', chainOrAccountChangedHandler);

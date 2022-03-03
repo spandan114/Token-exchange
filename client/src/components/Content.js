@@ -11,6 +11,7 @@ import Trades from './Trades'
 const Content = () => {
     const dispatch = useDispatch()
     const exchange = useSelector((state) => state.exchangeReducer.exchangeContract);
+    const account = useSelector((state) => state.web3Reducer.account);
 
     useEffect(() => {
         if(exchange){
@@ -26,13 +27,22 @@ const Content = () => {
         <div className="card  balances">
           <h5 className="card-header">Balance</h5>
           <div className="card-body">
-            <Balances/>
+            {
+              account?
+               <Balances/>
+              :<p>Wallet not connected</p>
+            }
+            
           </div>
         </div>
         <div className="card new-order">
           <h5 className="card-header">New Order</h5>
           <div className="card-body">
-            <NewOrder/>
+         {
+            account?
+             <NewOrder/>
+            :<p>Wallet not connected</p>
+            }
           </div>
         </div>
       </div>

@@ -29,6 +29,12 @@ export const loadWeb3 = async (dispatch) => {
 
 export const loadAccount = async (web3, dispatch) => {
   const account = await web3.eth.getAccounts();
+  const network = await web3.eth.net.getId();
+
+  if(network !== Number(process.env.REACT_APP_NETWORK_ID)){
+    alert("Contract not deployed in this network !")
+  }
+  console.log(network)
   dispatch(accountLoaded(account));
   return account;
 };
@@ -37,7 +43,7 @@ export const loadTokenContract = async (web3, dispatch) => {
   try {
     const tokenContract = new web3.eth.Contract(
       TokenContract.abi,
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      process.env.REACT_APP_TOKEN_ADDRESS
     );
     dispatch(tokenContractLoaded(tokenContract));
     return tokenContract;
@@ -50,7 +56,7 @@ export const loadExchangeContract = async (web3, dispatch) => {
   try {
     const tokenContract = new web3.eth.Contract(
       ExchangeContract.abi,
-      "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+      process.env.REACT_APP_EXCHANGE_ADDRESS
     );
     dispatch(exchangeContractLoaded(tokenContract));
     return tokenContract;
@@ -118,13 +124,13 @@ export const subscribeEvents = (exchangeContract,dispatch) =>{
     dispatch(createOrder(event))
   })
 
-  // exchangeContract.events.Deposite({},(err,event)=>{
-  //     dispatch(balancesLoaded())
-  // })
+  exchangeContract.events.Deposite({},(err,event)=>{
+      dispatch(balancesLoaded())
+  })
 
-  // exchangeContract.events.Withdraw({},(err,event)=>{
-  //   dispatch(balancesLoaded())
-  // })
+  exchangeContract.events.Withdraw({},(err,event)=>{
+    dispatch(balancesLoaded())
+  })
   
 }
 
