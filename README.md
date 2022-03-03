@@ -3,7 +3,7 @@ decentralized ERC-20 token (Brownie token ) exchange .
 
 <img src="./TokenExchange.png" alt="Exchange image">
 
-### Tech stack & modules used :man_technologist:
+### Tech stack & packages used :man_technologist:
 - React.js ,solidity ,hardhat ,mocha, chai, ether.js, web3.js,lodash, apexcharts & waffle
 ### Token exchange features :tada:
 - [x] Deposite & withdraw ether.
